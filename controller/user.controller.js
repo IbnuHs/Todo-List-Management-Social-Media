@@ -11,6 +11,17 @@ const register = async (req, res) => {
         status: 400,
         message: "Name or Email or Password Can't Be Empty",
       });
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email))
+      return res.status(400).json({
+        status: 400,
+        message: "Email Not valid",
+      });
+    if (password.length < 8)
+      return res.status(400).json({
+        status: 400,
+        return: "password cannot be less than 8 characters",
+      });
     const users = await user.findOne({
       where: {
         email: email,
@@ -57,6 +68,17 @@ const login = async (req, res) => {
         email: email,
       },
     });
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email))
+      return res.status(400).json({
+        status: 400,
+        message: "Email Not valid",
+      });
+    if (password.length < 8)
+      return res.status(400).json({
+        status: 400,
+        return: "password cannot be less than 8 characters",
+      });
     if (!users)
       return res.status(401).json({
         status: 401,
@@ -72,6 +94,7 @@ const login = async (req, res) => {
       {
         name: users.name,
         email: users.email,
+        userId: users.id,
       },
       process.env.ACCESS_TOKEN
     );

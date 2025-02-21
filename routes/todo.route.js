@@ -2,6 +2,7 @@ import {
   changeStatus,
   createTodo,
   deleteTodo,
+  editTodo,
   getAllTodo,
   getTodo,
 } from "../controller/todo.controller.js";
@@ -11,9 +12,10 @@ import verifyToken from "../middleware/jwt.middleware.js";
 const todoRoute = Router();
 
 todoRoute.post("/api/todo/create", verifyToken, createTodo);
-todoRoute.get("/api/todo/user/:userId", verifyToken, getAllTodo);
+todoRoute.get("/api/todo/user", verifyToken, getAllTodo);
 todoRoute.get("/api/todo/:id", verifyToken, getTodo);
 todoRoute.patch("/api/todo/updateStatus", verifyToken, changeStatus);
+todoRoute.patch("/api/todo/:id", verifyToken, editTodo);
 todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
 
 /**
@@ -31,14 +33,13 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
  *           schema:
  *             type: object
  *             properties:
- *               paltform:
+ *               platform:
  *                 type: string
  *               titleContent:
  *                 type: string
  *               dueOn:
  *                 type: date
- *               userId :
- *                  type : string
+ *                 example : 1999-09-29
  *     responses:
  *       201:
  *         description: Todo Successfully Created
@@ -65,19 +66,12 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
 
 /**
  * @swagger
- * /api/todo/user/{userId}:
+ * /api/todo/user:
  *   get:
  *     summary: Mengambil Data Todo
  *     description: Mengambil data Todo berdasarkan userId
  *     tags:
  *       - Todo
- *     parameters:
- *       - in : path
- *         name : userId
- *         required : true
- *         schema :
- *           type : string
- *         description : Mengambil data Todo berdasarkan UserId
  *     responses:
  *       200:
  *         description: Todo Successfully Created
@@ -115,7 +109,7 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
  *     description: Mengambil data Todo berdasarkan id todo
  *     tags:
  *       - Todo
- *     body:
+ *     parameters:
  *       - in : path
  *         name : id
  *         required : true
@@ -157,7 +151,7 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
  * @swagger
  * /api/todo/updateStatus:
  *   patch:
- *     summary: Mengubah status Laporan
+ *     summary: Mengubah status Todo
  *     description: Mengubah status laporan dengan value yang telah ditentukan yaitu ["PENDING", "COMPLETE", "OVERDUE"].
  *     tags:
  *       - Todo
@@ -172,7 +166,7 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
  *                 type: string
  *                 description: ID dari todo yang ingin diperbarui
  *               status:
- *                 type: string
+ *                 type: enum
  *                 enum: ["PENDING", "COMPLETE", "OVERDUE"]
  *                 description: Status baru dari todo
  *     responses:
@@ -197,6 +191,61 @@ todoRoute.delete("/api/todo/:id", verifyToken, deleteTodo);
  *             example:
  *               status: 404
  *               message: Todos Not Found
+ *       500:
+ *         description: Jika terjadi error pada server
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: 500
+ *               message: Internal Server Error
+ */
+/**
+ * @swagger
+ * /api/todo/{id}:
+ *   patch:
+ *     summary: Mengedit Todo
+ *     description: Mengubah laporan yang telah dibuat sebelumnya.
+ *     tags:
+ *       - Todo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id :
+ *                 type : string
+ *               platform:
+ *                 type: string
+ *               titleContent:
+ *                 type: string
+ *               dueOn:
+ *                 type: date
+ *                 example : 1999-09-29
+ *
+ *     responses:
+ *       200:
+ *         description: Berhasil mengedit todo
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: 200
+ *               message: Success Update Todo
+ *       400:
+ *         description: Jika id, platform atau dueOn kosong
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: 400
+ *               message: Please Fill id, platform, titleContent, dueOn
+ *       404:
+ *         description: Jika todo tidak ditemukan
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: 404
+ *               message: Todos Not Found, Invalid Id
  *       500:
  *         description: Jika terjadi error pada server
  *         content:

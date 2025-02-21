@@ -16,6 +16,7 @@ const verifyToken = (req, res, next) => {
           status: 401,
           message: err.message,
         });
+      req.userId = decode.userId;
     });
     next();
   } catch (error) {

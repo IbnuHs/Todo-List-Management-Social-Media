@@ -32,12 +32,22 @@ const userRoute = Router();
  *               status: 201
  *               message: User Created Successfully
  *       400:
- *         description: Name, Email, or Password Can't Be Empty
+ *         description: Bad Request - Validation Error
  *         content:
  *           application/json:
- *             example:
- *               status: 400
- *               message: Name, Email, or Password Can't Be Empty
+ *             examples:
+ *               EmptyFields:
+ *                 value:
+ *                   status: 400
+ *                   message: Name, Email, or Password Can't Be Empty
+ *               InvalidEmail:
+ *                 value:
+ *                   status: 400
+ *                   message: Email format is not valid
+ *               ShortPassword:
+ *                 value:
+ *                   status: 400
+ *                   message: Password must be at least 8 characters long
  *       409:
  *         description: Email Already Exists
  *         content:
@@ -75,12 +85,18 @@ const userRoute = Router();
  *               status: 200
  *               message: Login Successful
  *       400:
- *         description: Email or Password Can't Be Empty
+ *         description: Bad Request - Validation Error
  *         content:
  *           application/json:
- *             example:
- *               status: 400
- *               message: Email or Password Can't Be Empty
+ *             examples:
+ *               EmptyFields:
+ *                 value:
+ *                   status: 400
+ *                   message: Name, Email, or Password Can't Be Empty
+ *               InvalidEmail:
+ *                 value:
+ *                   status: 400
+ *                   message: Email format is not valid
  *       401:
  *         description: Authentication Error
  *         content:
