@@ -2,6 +2,8 @@ import express from "express";
 import userRoute from "./routes/user.route.js";
 import dotenv from "dotenv";
 import todoRoute from "./routes/todo.route.js";
+import swaggerDocs from "./config/swagger.js";
+import swaggerUI from "swagger-ui-express";
 
 const app = express();
 const port = 3000;
@@ -9,6 +11,8 @@ app.use(express.json());
 app.use(userRoute);
 app.use(todoRoute);
 dotenv.config();
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+// console.log(swaggerDocs);
 const initapp = async () => {
   try {
     app.listen(port, () => {

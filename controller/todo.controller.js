@@ -5,8 +5,7 @@ import user from "../models/user.model.js";
 const createTodo = async (req, res) => {
   try {
     const { platform, titleContent, dueOn, userId } = req.body;
-
-    if (!platform || !titleContent || !dueOn) {
+    if (!platform || !titleContent || !dueOn || !userId) {
       return res.status(400).json({ message: "Please fill in all fields" });
     }
     const users = await user.findOne({
@@ -14,6 +13,7 @@ const createTodo = async (req, res) => {
         id: userId,
       },
     });
+    console.log(users);
     if (!users)
       return res.status(401).json({
         status: 401,

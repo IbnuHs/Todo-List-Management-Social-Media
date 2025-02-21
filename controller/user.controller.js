@@ -7,11 +7,15 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password)
-      return res.status(401).json({
-        status: 401,
-        message: "Name or Email or Password Can't Be Epmty",
+      return res.status(400).json({
+        status: 400,
+        message: "Name or Email or Password Can't Be Empty",
       });
-    const users = await user.findOne({ email });
+    const users = await user.findOne({
+      where: {
+        email: email,
+      },
+    });
     if (users)
       return res.status(401).json({
         status: 401,
@@ -43,12 +47,16 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !email)
+    if (!email || !password)
       return res.status(401).json({
         status: 401,
         message: "email and password can't be empty",
       });
-    const users = await user.findOne({ email });
+    const users = await user.findOne({
+      where: {
+        email: email,
+      },
+    });
     if (!users)
       return res.status(401).json({
         status: 401,

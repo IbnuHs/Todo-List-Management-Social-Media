@@ -16,6 +16,9 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
     "nodemon": "^3.1.9",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-json": "^2.0.0",
+    "swagger-ui-express": "^5.0.1"
   }
 }
