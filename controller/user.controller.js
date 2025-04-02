@@ -106,4 +106,25 @@ const login = async (req, res) => {
     });
   }
 };
-export { register, login };
+
+const getAuthors = async (req, res) => {
+  try {
+    const authors = await user.findAll({
+      where: {
+        roles: "AUTHORS",
+      },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      data: authors,
+    });
+  } catch (error) {
+    return re.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+      details: error.message,
+    });
+  }
+};
+export { register, login, getAuthors };

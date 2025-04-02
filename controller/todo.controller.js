@@ -30,15 +30,13 @@ const createTodo = async (req, res) => {
         status: "error",
         message: "Invalid User",
       });
-    // console.log(author)
-
     const id = crypto.randomUUID();
     await todo.create({
       id: id,
       platform: platform,
       titleContent: titleContent,
       dueOn: dueOn,
-      authors: authors,
+      authorsId: authors,
       userId: users.id,
     });
 
@@ -57,39 +55,21 @@ const createTodo = async (req, res) => {
 
 const getAllTodo = async (req, res) => {
   try {
-    const userId = req.userId;
-    const users = await user.findOne({
-      where: {
-        id: userId,
-      },
-    });
-    if (!users)
-      return res.status(401).json({
-        status: "error",
-        message: "Invalid User",
-      });
-
     const todos = await todo.findAll({
       where: {
-        userId: users.id,
+        status: "NOT STARTED",
       },
       include: [
         {
           model: Platform,
           as: "platformDetails",
-          attributes: ["platform"],
+        },
+        {
+          model: user,
+          as: "author",
         },
       ],
-      attributes: {
-        exclude: "platform",
-      },
     });
-
-    if (!todos)
-      return res.status(200).json({
-        status: "success",
-        message: "Not Task Been Created",
-      });
     return res.status(200).json({
       status: "success",
       data: todos,
@@ -129,6 +109,28 @@ const getTodo = async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: `Internal Server Error : ${error.message}`,
+    });
+  }
+};
+
+const getCompleteTask = async (req, res) => {
+  try {
+    const task = await todo.findAll({
+      where: {
+        status: "COMPLETE",
+      },
+    });
+    const complete = await todo.findAll();
+    console.log(complete);
+    return res.status(200).json({
+      status: 200,
+      data: task,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 200,
+      message: "Internal Server Error",
+      detail: error.message,
     });
   }
 };
@@ -251,4 +253,12 @@ const deleteTodo = async (req, res) => {
   }
 };
 
-export { createTodo, getAllTodo, getTodo, changeStatus, deleteTodo, editTodo };
+export {
+  createTodo,
+  getAllTodo,
+  getTodo,
+  changeStatus,
+  deleteTodo,
+  editTodo,
+  getCompleteTask,
+};

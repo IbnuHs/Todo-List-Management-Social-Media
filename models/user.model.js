@@ -27,9 +27,9 @@ const user = db.define("user", {
   },
 });
 
-const syncUser = async () => {
-  await user.sync({ FORCE: true });
-};
-syncUser();
+// const syncUser = async () => {
+//   await user.sync({ FORCE: true });
+// };
+// syncUser();
 
 export default user;

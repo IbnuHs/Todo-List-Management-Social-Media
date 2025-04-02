@@ -5,6 +5,15 @@ const db = new Sequelize("todo-socmed", "root", "", {
   host: "localhost",
   dialect: "mysql",
   dialectModule: mysql2,
+  timezone: "Asia/Jakarta",
+  // dialectOptions: {
+  //   dateStrings: true,
+  //   typeCast: true,
+  //   useUTC: false,
+  // },
+  // define: {
+  //   timestamps: false,
+  // },
 });
 
 try {

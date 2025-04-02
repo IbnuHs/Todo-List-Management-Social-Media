@@ -8,16 +8,19 @@ import platformRoute from "./routes/platform.routes.js";
 import "./models/association.js";
 import cors from "cors";
 
-const option = {
-  origin: ["http://localhost:5173"],
+const corsOptions = {
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 const app = express();
 const port = 3000;
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(userRoute);
 app.use(todoRoute);
 app.use(platformRoute);
-app.use(cors(option));
 dotenv.config();
 app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 // console.log(swaggerDocs);
