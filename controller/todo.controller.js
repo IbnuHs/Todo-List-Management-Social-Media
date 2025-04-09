@@ -57,7 +57,7 @@ const getAllTodo = async (req, res) => {
   try {
     const todos = await todo.findAll({
       where: {
-        status: "NOT STARTED",
+        status: ["NOT STARTED", "ON PROCESS"],
       },
       include: [
         {
@@ -119,6 +119,16 @@ const getCompleteTask = async (req, res) => {
       where: {
         status: "COMPLETE",
       },
+      include: [
+        {
+          model: Platform,
+          as: "platformDetails",
+        },
+        {
+          model: user,
+          as: "author",
+        },
+      ],
     });
     const complete = await todo.findAll();
     console.log(complete);
@@ -178,11 +188,12 @@ const changeStatus = async (req, res) => {
 
 const editTodo = async (req, res) => {
   try {
-    const { id, platform, titleContent, dueOn } = req.body;
-    if (!id || !platform || !titleContent || !dueOn) {
+    const id = req.params.id;
+    const { platform, titleContent, author } = req.body;
+    if (!id || !platform || !titleContent || !author) {
       return res.status(400).json({
         status: 400,
-        message: "Please Fill id, platform, titleContent, dueOn",
+        message: "Please Fill id, platform, titleContent",
       });
     }
     const todos = await todo.findOne({
@@ -198,7 +209,7 @@ const editTodo = async (req, res) => {
     await todos.update({
       platform: platform,
       titleContent: titleContent,
-      dueOn: dueOn,
+      authorsId: author,
     });
 
     return res.status(200).json({

@@ -89,6 +89,7 @@ const login = async (req, res) => {
         name: users.name,
         email: users.email,
         userId: users.id,
+        roles: users.roles,
       },
       process.env.ACCESS_TOKEN
     );
